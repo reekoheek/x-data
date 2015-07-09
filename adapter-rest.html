@@ -1,0 +1,61 @@
+<link rel="import" href="x-data.html">
+<script type="text/javascript">
+(function(root) {
+  root.XData.set('rest', {
+    fetch: function(cursor) {
+      var collection = cursor.collection;
+      var promise = Promise.resolve();
+      if (!collection.cache) {
+        promise = new Promise(function(resolve, reject) {
+          var request = new XMLHttpRequest();
+          request.open('GET', collection.url, true);
+
+          request.onload = function() {
+            if (request.status >= 200 && request.status < 400) {
+              try {
+                var data = JSON.parse(request.responseText);
+                collection.cache = data.entries;
+                resolve();
+              } catch(err) {
+                reject(err);
+              }
+            } else {
+              reject(new Error('Error fetching with status: ' + request.status));
+            }
+          };
+
+          request.onerror = function(err) {
+            reject(err);
+          };
+
+          request.send();
+        });
+      }
+      return promise.then(function() {
+        var entries = [];
+        var all = collection.cache.slice();
+
+        var counter = 0;
+        all.some(function(row, index) {
+          if (index < cursor._skip) {
+            return;
+          }
+
+          if (cursor._limit !== -1 && cursor._limit <= counter) {
+            return true;
+          }
+
+          // if query match
+          if (true) {
+            entries.push(row);
+
+            counter++;
+          }
+        });
+
+        return entries;
+      });
+    }
+  });
+})(this);
+</script>
