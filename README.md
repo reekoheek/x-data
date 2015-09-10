@@ -2,6 +2,7 @@
 
 Xin application container
 
+### Discontinued, please use [xin2](https://github.com/xinix-technology/xin)
 
 ## Features
 
@@ -9,7 +10,3 @@ Xin application container
 - Routing with history (push state)
 - Remote view routing (if there is viewport available)
 - Trigger "not-found" event on element
-
-## TODO
-
-- [ ] directives
